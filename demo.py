@@ -1,11 +1,11 @@
-# explore how Google's Fact Check Tools API works
+# See how Google's Fact Check Tools API works
 # See https://developers.google.com/fact-check/tools/api/reference/rest/v1alpha1/claims for data structure etc.
 import json
 import requests
 import hashlib
 import pprint
 
-API_KEY = ""
+API_KEY = "INSERT YOURS HERE"  # Instructions https://support.google.com/googleapi/answer/6158862
 URL = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 
 
@@ -158,7 +158,8 @@ def recent_sample(publishers: set, output_filename="fce_sightings.json") -> dict
 if __name__ == "__main__":
     all_pubs = find_many_publishers()
     claim_match_pairs = recent_sample(all_pubs)
-    # claim_match_pairs = get_publisher_sightings()
+    # Or try this to focus on one org:
+    # claim_match_pairs = get_publisher_sightings("africacheck.org")
 
     print(f"Found {len(claim_match_pairs)} pairs")
     pprint.pp(list(claim_match_pairs.values())[0:5])
