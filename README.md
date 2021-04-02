@@ -1,4 +1,4 @@
-# fact_check_explorer
+# Fact Check Explorer
 
 Explore Google's Fact Check Explorer
 
