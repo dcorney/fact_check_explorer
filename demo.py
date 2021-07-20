@@ -1,12 +1,13 @@
 # See how Google's Fact Check Tools API works
 # See https://developers.google.com/fact-check/tools/api/reference/rest/v1alpha1/claims for data structure etc.
 import json
+from typing import List
 import requests
 import hashlib
-import pprint
 
 API_KEY = "INSERT YOURS HERE"  # Instructions https://support.google.com/googleapi/answer/6158862
 URL = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
+LANGUAGE_CODE = "EN"
 
 
 def find_publishers(query: str, max_age=30) -> set:
@@ -18,7 +19,7 @@ def find_publishers(query: str, max_age=30) -> set:
         "query": query,
         "maxAgeDays": max_age,
         "pageSize": 25,
-        "languageCode": "en",
+        "languageCode": LANGUAGE_CODE,
         "key": API_KEY,  # NB: API key is passed into params, not headers or auth or anywhere else
     }
 
@@ -67,12 +68,12 @@ def find_many_publishers():
     return all_pubs
 
 
-def get_publisher_sightings(publisher_site="fullfact.org", max_age=30):
+def get_publisher_sightings(publisher_site="fullfact.org", max_age=30) -> List:
     """Get all fact checks from a single publisher up to *max_age* days old."""
     data = {
         "maxAgeDays": max_age,
         "pageSize": 25,
-        "languageCode": "en",
+        "languageCode": LANGUAGE_CODE,
         "reviewPublisherSiteFilter": publisher_site,
         "key": API_KEY,  # NB: API key is passed into params, not headers or auth or anywhere else
     }
@@ -159,7 +160,5 @@ if __name__ == "__main__":
     all_pubs = find_many_publishers()
     claim_match_pairs = recent_sample(all_pubs)
     # Or try this to focus on one org:
-    # claim_match_pairs = get_publisher_sightings("africacheck.org")
-
-    print(f"Found {len(claim_match_pairs)} pairs")
-    pprint.pp(list(claim_match_pairs.values())[0:5])
+    # claim_match_pairs = get_publisher_sightings("fullfact.org")
+    print(claim_match_pairs)
